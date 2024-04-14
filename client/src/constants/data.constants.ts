@@ -6,7 +6,7 @@ export const textFieldsDataLogin : TextFieldData[] = [
 ];
 
 export const textFieldsDataRegister : TextFieldData[] = [
-    { label: "Full Name", type: "text" },
+    { label: "FullName", type: "text" },
     { label: "Username", type: "text" },
     { label: "Password", type: "password" },
     { label: "Bio", type: "text" },

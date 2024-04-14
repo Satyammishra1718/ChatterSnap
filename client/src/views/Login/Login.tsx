@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@mui/material";
 import { Container, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -8,19 +9,57 @@ import _ from "lodash";
 
 import { textFieldsDataLogin } from "../../constants/data.constants";
 import { TextFieldData } from "../../constants/types.constants";
+import { validateLoginField } from "../../utils/FormValidation";
 
 const Login = (): React.ReactNode => {
   const navigate = useNavigate();
 
+  const [values, setValues] = useState<{ [Key: string]: string }>({
+    Username: "",
+    Password: "",
+  });
+
+  const [errors, setErrors] = useState<{ [Key: string]: string }>({
+    Username: "",
+    Password: "",
+  });
+
   const navigateToRegister = (): void => {
     navigate("/register");
+  };
+
+  const onValueChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: string
+  ) => {
+    setValues((v) => ({
+      ...v,
+      [id]: e.target.value,
+    }));
+  };
+
+  const handleLogin = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setErrors({});
+    _.forEach(textFieldsDataLogin, (textField) => {
+      const errorMessage = validateLoginField(
+        values[textField.label],
+        textField.label
+      );
+      setErrors((prevErrors: object) => ({
+        ...prevErrors,
+        [textField.label]: errorMessage,
+      }));
+    });
+    const hasErrors = _.some(errors, (error) => error.length > 0);
+
+    hasErrors ? e.preventDefault() : navigate("/register");
   };
 
   return (
     <div
       style={{
         background: "linear-gradient(to bottom, #87CEEB, #F0F8FF)",
-        overflowX:"hidden",
+        overflowX: "hidden",
       }}
     >
       <Container
@@ -31,7 +70,7 @@ const Login = (): React.ReactNode => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          padding:"0 2rem",
+          padding: "0 2rem",
         }}
       >
         <Helmet>
@@ -45,7 +84,7 @@ const Login = (): React.ReactNode => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            borderRadius:"1rem"
+            borderRadius: "1rem",
           }}
         >
           <Typography variant="h5">Sign In</Typography>
@@ -66,6 +105,18 @@ const Login = (): React.ReactNode => {
                   type={textField.type === "text" ? "text" : "password"}
                   margin="normal"
                   variant="outlined"
+                  value={values[textField.label]}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    onValueChange(e, textField.label)
+                  }
+                  helperText={errors[textField.label]}
+                  error={errors[textField.label].length > 0}
+                  onFocus={() =>
+                    setErrors((prevErrors) => ({
+                      ...prevErrors,
+                      [textField.label]: "",
+                    }))
+                  }
                 />
               )
             )}
@@ -75,6 +126,7 @@ const Login = (): React.ReactNode => {
               color="primary"
               type="submit"
               fullWidth
+              onClick={(e: any) => handleLogin(e)}
             >
               Login
             </Button>

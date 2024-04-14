@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, Button, IconButton, Stack } from "@mui/material";
 import { Container, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -10,12 +10,55 @@ import _ from "lodash";
 
 import { textFieldsDataRegister } from "../../constants/data.constants";
 import { TextFieldData } from "../../constants/types.constants";
+import { validateRegisterField } from "../../utils/FormValidation";
 
 const Login = (): React.ReactNode => {
   const navigate = useNavigate();
 
+  const [values, setValues] = useState<{ [Key: string]: string }>({
+    FullName: "",
+    Username: "",
+    Password: "",
+    Bio: "",
+  });
+
+  const [errors, setErrors] = useState<{ [Key: string]: string }>({
+    FullName: "",
+    Username: "",
+    Password: "",
+    Bio: "",
+  });
+
   const navigateToLogin = (): void => {
     navigate("/login");
+  };
+
+  const onValueChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: string
+  ) => {
+    setValues((v) => ({
+      ...v,
+      [id]: e.target.value,
+    }));
+  };
+
+  const handleRegister = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setErrors({});
+    _.forEach(textFieldsDataRegister, (textField) => {
+      const errorMessage = validateRegisterField(
+        values[textField.label],
+        textField.label
+      );
+      setErrors((prevErrors: object) => ({
+        ...prevErrors,
+        [textField.label]: errorMessage,
+      }));
+    });
+
+    const hasErrors = _.some(errors, (error) => error.length > 0);
+
+    hasErrors ? e.preventDefault() : navigate("/login");
   };
 
   return (
@@ -33,7 +76,7 @@ const Login = (): React.ReactNode => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          padding:"0 2rem",
+          padding: "0 2rem",
         }}
       >
         <Helmet>
@@ -100,6 +143,18 @@ const Login = (): React.ReactNode => {
                   type={textField.type === "text" ? "text" : "password"}
                   margin="normal"
                   variant="outlined"
+                  value={values[textField.label]}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    onValueChange(e, textField.label)
+                  }
+                  helperText={errors[textField.label]}
+                  error={errors[textField.label].length > 0}
+                  onFocus={() =>
+                    setErrors((prevErrors) => ({
+                      ...prevErrors,
+                      [textField.label]: "",
+                    }))
+                  }
                 />
               )
             )}
@@ -109,6 +164,7 @@ const Login = (): React.ReactNode => {
               color="primary"
               type="submit"
               fullWidth
+              onClick={(e: any) => handleRegister(e)}
             >
               Register
             </Button>
