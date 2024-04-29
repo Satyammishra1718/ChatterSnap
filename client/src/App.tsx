@@ -1,6 +1,7 @@
 import  { Suspense, lazy } from 'react';
 import { BrowserRouter as Router , Routes , Route } from "react-router-dom";
 import Spin from './components/CommonComponents/Spin/Spin';
+import LayoutLoader from './components/CommonComponents/LayoutLoader/LayoutLoader'
 
 const Home = lazy(() => import('./views/Home/Home'));
 const Login = lazy(() => import('./views/Login/Login'));
@@ -11,15 +12,13 @@ const GroupManagement = lazy(() => import('./views/GroupManagement/GroupManageme
 const App = () => {
   return (
     <Router>
-      <Suspense fallback={<Spin/>}>
        <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/chat/:chatId' element={<Chat/>}/>
-        <Route path='/group' element={<GroupManagement/>}/>
-        <Route path="/register" element={<Register/>}/>
+        <Route path='/' element={<Suspense fallback={<LayoutLoader/>}><Home/></Suspense>}/>
+        <Route path='/login' element={<Suspense fallback={<Spin/>}><Login/></Suspense>}/>
+        <Route path='/chat/:chatId' element={<Suspense fallback={<LayoutLoader/>}><Chat/></Suspense>}/>
+        <Route path='/groups' element={<Suspense fallback={<LayoutLoader/>}><GroupManagement/></Suspense>}/>
+        <Route path="/register" element={<Suspense fallback={<Spin/>}><Register/></Suspense>}/>
        </Routes>
-      </Suspense>
     </Router>
   )
 }

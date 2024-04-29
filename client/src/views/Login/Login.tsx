@@ -3,13 +3,13 @@ import { Button } from "@mui/material";
 import { Container, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import { Helmet } from "react-helmet-async";
 import { StyledTextField } from "../../components/StyledComponents/StyledTextField/StyledTextField";
 import _ from "lodash";
 
 import { textFieldsDataLogin } from "../../constants/data.constants";
 import { TextFieldData } from "../../constants/types.constants";
 import { validateLoginField } from "../../utils/FormValidation";
+import Title from "../../components/CommonComponents/Title/Title";
 
 const Login = (): React.ReactNode => {
   const navigate = useNavigate();
@@ -50,9 +50,7 @@ const Login = (): React.ReactNode => {
         [textField.label]: errorMessage,
       }));
     });
-    const hasErrors = _.some(errors, (error) => error.length > 0);
-
-    hasErrors ? e.preventDefault() : navigate("/register");
+    e.preventDefault();
   };
 
   return (
@@ -73,10 +71,7 @@ const Login = (): React.ReactNode => {
           padding: "0 2rem",
         }}
       >
-        <Helmet>
-          <title>SignIn Page</title>
-          <meta name="description" content="Login to your account" />
-        </Helmet>
+        <Title title="SignIn Page" description="Login to your account" />
         <Paper
           elevation={24}
           sx={{
@@ -99,7 +94,6 @@ const Login = (): React.ReactNode => {
               (textField: TextFieldData, index: number) => (
                 <StyledTextField
                   key={index}
-                  required
                   fullWidth
                   label={textField.label}
                   type={textField.type === "text" ? "text" : "password"}

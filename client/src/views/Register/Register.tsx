@@ -4,16 +4,18 @@ import { Container, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { CameraAlt as CameraAltIcon } from "@mui/icons-material";
 import { VisuallyHiddenInput } from "../../components/StyledComponents/VisuallyHiddenInput/VisuallyHiddenInput";
-import { Helmet } from "react-helmet-async";
 import { StyledTextField } from "../../components/StyledComponents/StyledTextField/StyledTextField";
 import _ from "lodash";
 
 import { textFieldsDataRegister } from "../../constants/data.constants";
 import { TextFieldData } from "../../constants/types.constants";
 import { validateRegisterField } from "../../utils/FormValidation";
+import Title from "../../components/CommonComponents/Title/Title";
 
-const Login = (): React.ReactNode => {
+const Register = (): React.ReactNode => {
   const navigate = useNavigate();
+
+  const [image, setImage] = useState<File | null>(null);
 
   const [values, setValues] = useState<{ [Key: string]: string }>({
     FullName: "",
@@ -43,6 +45,11 @@ const Login = (): React.ReactNode => {
     }));
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    file && setImage(file);
+  };
+
   const handleRegister = (e: React.ChangeEvent<HTMLInputElement>) => {
     setErrors({});
     _.forEach(textFieldsDataRegister, (textField) => {
@@ -55,10 +62,7 @@ const Login = (): React.ReactNode => {
         [textField.label]: errorMessage,
       }));
     });
-
-    const hasErrors = _.some(errors, (error) => error.length > 0);
-
-    hasErrors ? e.preventDefault() : navigate("/login");
+    e.preventDefault();
   };
 
   return (
@@ -79,10 +83,7 @@ const Login = (): React.ReactNode => {
           padding: "0 2rem",
         }}
       >
-        <Helmet>
-          <title>SignUp Page</title>
-          <meta name="description" content="Create new account" />
-        </Helmet>
+        <Title title="SignUp Page" description="Create new account" />
         <Paper
           elevation={24}
           sx={{
@@ -93,9 +94,9 @@ const Login = (): React.ReactNode => {
             maxHeight: "90vh",
             overflowY: "scroll",
             borderRadius: "1rem",
-            "&::-webkit-scrollbar": {
-              display: "none",
-            },
+            // "&::-webkit-scrollbar": {
+            //   display: "none",
+            // },
           }}
         >
           <Typography variant="h5">Sign Up</Typography>
@@ -112,6 +113,8 @@ const Login = (): React.ReactNode => {
                   height: "10rem",
                   objectFit: "contain",
                 }}
+                alt="Avatar"
+                src={image ? URL.createObjectURL(image) : undefined}
               />
               <IconButton
                 sx={{
@@ -128,7 +131,11 @@ const Login = (): React.ReactNode => {
               >
                 <>
                   <CameraAltIcon />
-                  <VisuallyHiddenInput type="file" />
+                  <VisuallyHiddenInput
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
                 </>
               </IconButton>
             </Stack>
@@ -137,7 +144,6 @@ const Login = (): React.ReactNode => {
               (textField: TextFieldData, index: number) => (
                 <StyledTextField
                   key={index}
-                  required
                   fullWidth
                   label={textField.label}
                   type={textField.type === "text" ? "text" : "password"}
@@ -185,4 +191,4 @@ const Login = (): React.ReactNode => {
   );
 };
 
-export default Login;
+export default Register;
