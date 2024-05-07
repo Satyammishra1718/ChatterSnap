@@ -9,7 +9,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <HelmetProvider>
       <CssBaseline />
-      <div className={styles.globalStyles}>
+      <div className={styles.globalStyles} onContextMenu={e => e.preventDefault()}>
         <App />
       </div>
     </HelmetProvider>

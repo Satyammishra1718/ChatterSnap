@@ -6,6 +6,6 @@ export const CustomLink = styled(LinkComponent)({
   color: "black",
   padding: "1rem",
   "&:hover": {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "rgba(0,0,0,0.1)",
   },
 });

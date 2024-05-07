@@ -2,6 +2,7 @@ import { memo } from "react";
 import { ChatItemProps } from "../../../constants/types.constants";
 import { CustomLink } from "../../StyledComponents/CustomLink/CustomLink";
 import { Box, Stack, Typography } from "@mui/material";
+import AvatarCard from "../AvatarCard/AvatarCard";
 
 const ChatItem: React.FC<ChatItemProps> = ({
   avatar = [],
@@ -12,13 +13,13 @@ const ChatItem: React.FC<ChatItemProps> = ({
   isOnline,
   newMessageAlert,
   index = 0,
-  handleDeleteChatOpen,
+  handleDeleteChat,
 }) => {
   return (
     <CustomLink
     sx={{padding:"0rem"}}
       to={`/chat/${_id}`}
-      onContextMenu={(e) => handleDeleteChatOpen(e, _id, groupChat)}
+      onContextMenu={(e) => handleDeleteChat(e, _id, groupChat)}
     >
       <div
         style={{
@@ -31,6 +32,7 @@ const ChatItem: React.FC<ChatItemProps> = ({
           position: "relative",
         }}
       >
+        <AvatarCard avatar={avatar} max />
         <Stack>
           <Typography>{name}</Typography>
           {newMessageAlert && (

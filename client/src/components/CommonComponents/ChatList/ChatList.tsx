@@ -17,7 +17,7 @@ const ChatList: React.FC<ChatListProps> = ({
 
         const newMessage = newMessageAlert.find(({ chatId }) => chatId === _id);
 
-        const isOnline = members?.some((member: any) =>
+        const isOnline = members?.some(() =>
           onlineUsers.includes(_id)
         );
 
@@ -32,7 +32,7 @@ const ChatList: React.FC<ChatListProps> = ({
             key={_id}
             groupChat={groupChat}
             sameSender={chatId === _id}
-            handleDeleteChatOpen={handleDeleteChat}
+            handleDeleteChat={handleDeleteChat}
           />
         );
       })}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, useState } from "react";
 import {
   AppBar,
   Box,
@@ -17,6 +17,11 @@ import {
 } from "@mui/icons-material";
 import {  useNavigate } from "react-router-dom";
 
+const SearchModal = lazy(() => import("../SearchModal/SearchModal"));
+const NotificationModal = lazy(() => import("../NotificationModal/NotificationModal"));
+const NewGroupModal = lazy(() => import("../NewGroupModal/NewGroupModal"));
+const LogoutModal = lazy(() => import("../LogoutModal/LogoutModal"));
+
 type IconButtonData = {
   title: string;
   icon: React.ReactNode ;
@@ -26,20 +31,35 @@ type IconButtonData = {
 
 const Header = () => {
   const navigate = useNavigate();
+  const [isSearchOpen , setIsSearchOpen] = useState(false);
+  const [isNotificationOpen , setIsNotificationOpen] = useState(false);
+  const [isNewGroupOpen , setIsNewGroupOpen] = useState(false);
   const handleMobile = () => {
     console.log("hii");
   };
+
+  const SearchOpen = () => {
+    setIsSearchOpen(true);
+  }
+
+  const NotificationsOpen = () => {
+    setIsNotificationOpen(true);
+  }
+
+  const newGroupOpen = () => {
+    setIsNewGroupOpen(true);
+  }
 
   const iconButtonData: IconButtonData[] = [
     {
       title: "Search",
       icon: <SearchIcon />,
-      onClick: () => console.log("Search"),
+      onClick: () => SearchOpen(),
     },
     {
       title: "New Group",
       icon: <AddIcon />,
-      onClick: () => console.log("New Group"),
+      onClick: () => newGroupOpen(),
     },
     {
       title: "Manage Groups",
@@ -49,7 +69,7 @@ const Header = () => {
     {
       title: "Notifications",
       icon: <NotificationIcon />,
-      onClick: () => console.log("notifications"),
+      onClick: () => NotificationsOpen(),
     },
     {
       title: "Logout",
@@ -59,6 +79,7 @@ const Header = () => {
   ];
 
   return (
+    <>
     <Box sx={{ flexGrow: 1 }} height={"4rem"}>
       <AppBar position="static" sx={{ bgcolor: "#87CEEB" }}>
         <Toolbar>
@@ -86,6 +107,11 @@ const Header = () => {
         </Toolbar>
       </AppBar>
     </Box>
+
+    {isSearchOpen && <SearchModal/>}
+    {isNotificationOpen && <NotificationModal />}
+    {isNewGroupOpen && <NewGroupModal />}
+    </>
   );
 };
 

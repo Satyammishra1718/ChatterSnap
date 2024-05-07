@@ -12,10 +12,10 @@ export interface IconButtonData  {
 export interface ChatListProps {
     w?: string;
     chats?: any;
-    chatId?: string;
+    chatId?: any;
     onlineUsers?: string[];
-    newMessageAlert?: { chatId: string; count: number }[];
-    handleDeleteChat?: () => void;
+    newMessageAlert?: { chatId: any; count: number }[];
+    handleDeleteChat?: any;
   };
 
 export interface ChatItemProps {
@@ -27,6 +27,16 @@ export interface ChatItemProps {
     isOnline?: boolean;
     newMessageAlert?: any;
     index?: number;
-    handleDeleteChatOpen?: any;
+    handleDeleteChat?: any;
     members?: string[];
   }
+
+ export interface AvatarCardProps {
+    avatar : any;
+    max:any;
+}
+
+export interface ProfileCardProps {
+  text : any,
+  heading : any,
+}
